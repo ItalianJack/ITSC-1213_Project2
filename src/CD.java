@@ -9,7 +9,5 @@ public class CD extends Product {
     }
 
     // Getters (no setters, object is immutable)
-    public String getArtist() {
-        return artist;
-    }
+    public String getArtist() {return artist;}
 }

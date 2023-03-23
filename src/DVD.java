@@ -9,7 +9,5 @@ public class DVD extends Product {
     }
 
     // Getters (no setters, object is immutable)
-    public String getStudio() {
-        return studio;
-    }
+    public String getStudio() {return studio;}
 }
