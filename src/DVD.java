@@ -10,4 +10,11 @@ public class DVD extends Product {
 
     // Getters (no setters, object is immutable)
     public String getStudio() {return studio;}
+
+    //Print method
+    @Override
+    public void print() {
+        super.print();
+        System.out.println("Studio: "+this.studio);
+    }
 }

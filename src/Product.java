@@ -1,4 +1,4 @@
-public abstract class Product {
+public abstract class Product implements Comparable<Product> {
     private String name;
     private double price;
 
@@ -15,4 +15,14 @@ public abstract class Product {
         return price;
     }
 
+    public void print() {
+        System.out.println("Name: "+this.name);
+        System.out.println("Price: $"+this.price);
+    }
+
+    @Override
+    public int compareTo(Product o) {
+        if (this instanceof )
+        return 0;
+    }
 }

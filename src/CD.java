@@ -10,4 +10,11 @@ public class CD extends Product {
 
     // Getters (no setters, object is immutable)
     public String getArtist() {return artist;}
+
+    //Print method
+    @Override
+    public void print() {
+        super.print();
+        System.out.println("Artist: "+this.artist);
+    }
 }
