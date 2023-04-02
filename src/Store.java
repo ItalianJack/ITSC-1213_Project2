@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-import javax.management.openmbean.InvalidOpenTypeException;
-
 public class Store implements BookstoreSpecification {
     
     // Fields
