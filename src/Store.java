@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
-public class Store {
+import javax.management.openmbean.InvalidOpenTypeException;
+
+public class Store implements BookstoreSpecification {
     
     // Fields
     private ArrayList<Member> members;
@@ -55,6 +57,46 @@ public class Store {
             inventory.get(i).print();
             System.out.println();
         }
+    }
+
+    @Override
+    public double inventoryValue() {
+        double inventoryValue = 0;
+        for (Product item : inventory) {
+            inventoryValue += item.getPrice();
+        }
+        return inventoryValue;
+    }
+
+    @Override
+    public int restockProduct(int productId, int amount) {
+        if (inventory.get(productId) instanceof Book) {
+            Book book = (Book)inventory.get(productId);
+            for (int i = 0; i < amount; i++) {
+                inventory.add(new Book(book.getName(), book.getPrice(), book.getAuthor()));
+            }
+        } else if (inventory.get(productId) instanceof CD) {
+            CD cd = (CD)inventory.get(productId);
+            for (int i = 0; i < amount; i++) {
+                inventory.add(new CD(cd.getName(), cd.getPrice(), cd.getArtist()));
+            }
+        } else {
+            DVD dvd = (DVD)inventory.get(productId);
+            for (int i = 0; i < amount; i++) {
+                inventory.add(new DVD(dvd.getName(), dvd.getPrice(), dvd.getStudio()));
+            }
+        }
+        int numInStock = 0;
+        for (Product item : inventory) {
+            if (inventory.get(productId) instanceof Book && item instanceof Book) {
+                numInStock++;
+            } else if (inventory.get(productId) instanceof CD && item instanceof CD) {
+                numInStock++;
+            } else if (inventory.get(productId)instanceof DVD && item instanceof DVD) {
+                numInStock++;
+            }
+        }
+        return numInStock;
     }
     
 }// end class

@@ -11,6 +11,7 @@ public class TestHarness {
         int index = 0;
         String tempString = "";
         double tempDouble = 0.0;
+        int tempInt = 0;
         
         // Create a new Store object that contains the store's inventory and members.
         Store store = new Store();
@@ -23,6 +24,7 @@ public class TestHarness {
 
             // Main menu prompt.
             System.out.println("----- Welcome to the Bookstore Management System -----");
+            System.out.println("GRADER PLEASE NOTE THAT INVENTORY VALUE ACCESSIBLE FROM OPTION 5 AND RESTOCK PRODUCT FROM OPTION 3");
             System.out.println("Please choose an option below:");
             System.out.println();
             System.out.println("1\tCreate a new order.");
@@ -157,49 +159,68 @@ public class TestHarness {
                     }
                     break;
                 case 3: // Add items to the store inventory.
-                    System.out.println("Please enter 1 to add a book, 2 for a DVD, and 3 for a CD:");
+                    System.out.println("Please enter 1 to add a new item, or 2 to add more of an existing item.");
                     intInput = sc.nextInt();
                     sc.nextLine();
                     switch (intInput) {
-                        case 1: // Adding a book.
-                            System.out.println("Enter the book's name:");
-                            tempString = sc.nextLine();
-                            System.out.println("Enter the book's price:");
-                            tempDouble = sc.nextDouble();
+                        case 1: // Adding a new item
+                            System.out.println("Please enter 1 to add a book, 2 for a DVD, and 3 for a CD:");
+                            intInput = sc.nextInt();
                             sc.nextLine();
-                            System.out.println("Enter the name of the book's author:");
-                            strInput = sc.nextLine();
-                            store.addProduct(new Book(tempString, tempDouble, strInput));
-                            System.out.println("Book "+tempString+" added to inventory.");
+                            switch (intInput) {
+                                case 1: // Adding a book.
+                                    System.out.println("Enter the book's name:");
+                                    tempString = sc.nextLine();
+                                    System.out.println("Enter the book's price:");
+                                    tempDouble = sc.nextDouble();
+                                    sc.nextLine();
+                                    System.out.println("Enter the name of the book's author:");
+                                    strInput = sc.nextLine();
+                                    store.addProduct(new Book(tempString, tempDouble, strInput));
+                                    System.out.println("Book "+tempString+" added to inventory.");
+                                    break;
+
+                                case 2: // Adding a DVD.
+                                    System.out.println("Enter the DVD's name:");
+                                    tempString = sc.nextLine();
+                                    System.out.println("Enter the DVD's price:");
+                                    tempDouble = sc.nextDouble();
+                                    sc.nextLine();
+                                    System.out.println("Enter the name the studio that released the DVD:");
+                                    strInput = sc.nextLine();
+                                    store.addProduct(new DVD(tempString, tempDouble, strInput));
+                                    System.out.println("DVD "+tempString+" added to inventory.");
+                                    break;
+
+                                case 3: // Adding a CD.
+                                    System.out.println("Enter the album name:");
+                                    tempString = sc.nextLine();
+                                    System.out.println("Enter the CD's price:");
+                                    tempDouble = sc.nextDouble();
+                                    sc.nextLine();
+                                    System.out.println("Enter the name of the artist:");
+                                    strInput = sc.nextLine();
+                                    store.addProduct(new CD(tempString, tempDouble, strInput));
+                                    System.out.println("CD "+tempString+" added to inventory.");
+                                    break;
+                            
+                                default:
+                                    break;
+                            }
+                        case 2: // Adding more of an existing item
+                            System.out.println("Current inventory:");
+                            store.printInventory();
+                            System.out.println("Please enter the number of the item you want to add more of:");
+                            intInput = sc.nextInt();
+                            sc.nextLine();
+                            System.out.println("Please enter the quantity you wish to add:");
+                            tempInt = sc.nextInt();
+                            sc.nextLine();
+                            System.out.println("Quanitity now in stock:"+store.restockProduct(intInput, tempInt));
+                            
                             break;
 
-                        case 2: // Adding a DVD.
-                            System.out.println("Enter the DVD's name:");
-                            tempString = sc.nextLine();
-                            System.out.println("Enter the DVD's price:");
-                            tempDouble = sc.nextDouble();
-                            sc.nextLine();
-                            System.out.println("Enter the name the studio that released the DVD:");
-                            strInput = sc.nextLine();
-                            store.addProduct(new DVD(tempString, tempDouble, strInput));
-                            System.out.println("DVD "+tempString+" added to inventory.");
-                            break;
-
-                        case 3: // Adding a CD.
-                            System.out.println("Enter the album name:");
-                            tempString = sc.nextLine();
-                            System.out.println("Enter the CD's price:");
-                            tempDouble = sc.nextDouble();
-                            sc.nextLine();
-                            System.out.println("Enter the name of the artist:");
-                            strInput = sc.nextLine();
-                            store.addProduct(new CD(tempString, tempDouble, strInput));
-                            System.out.println("CD "+tempString+" added to inventory.");
-                            break;
-                    
-                        default:
-                            break;
-                    }
+                    }// end existing vs new switch   
                     break;
 
                 case 4: // Show members and premium members
@@ -217,7 +238,9 @@ public class TestHarness {
                     break;
 
                 case 5: // Show current inventory.
+                    System.out.println("\nCurrent inventory:");
                     store.printInventory();
+                    System.out.println("Value of current inventory: $"+store.inventoryValue());
                     break;
             }
         } // END MAIN LOOP
