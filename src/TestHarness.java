@@ -51,11 +51,78 @@ public class TestHarness {
                 case 1: // Start a new order.
 
                     // BEGIN PURCHASE PROMPT
+                    // Determine if there is anything in stock
                     if (store.getInventory().size() > 0) {
-                        
+                        while (true) {
+                            // Allow users to add items to their cart
+                            System.out.println("Here are the items currently in stock:");
+                            store.printInventory();
+                            System.out.println("Please enter the number of the product you want to add to your cart:");
+                            intInput = sc.nextInt();
+                            sc.nextLine();
+                            cart.add(store.getInventory().get(intInput));
+                            System.out.println("Would you like to add another? [y/n]");
+                            strInput = sc.nextLine();
+                            if (strInput.toLowerCase().equals("n")) {
+                                break;
+                            }
+                        }
                     } else {
                         System.out.println("There are no products currently in stock.");
                     }
+
+                    // Print out the contents of the cart while adding the price of each item to the total, then print the total
+                    System.out.println("Your cart currently contains:");
+                    double orderTotal = 0.0;
+                    for (Product item : cart) {
+                        System.out.println("--------------------");
+                        orderTotal += item.getPrice();
+                        item.print();
+                    }
+                    System.out.println("--------------------");
+                    System.out.println("Order total: $"+(((int)(orderTotal*100))/100.0));
+                    System.out.println("--------------------");
+
+                    if (orderTotal == 0) {
+                        break;
+                    }
+
+                    // Prompt the user for their name, and determine if they are a member
+                    System.out.println("What is your name?");
+                    strInput = sc.nextLine();
+
+                    index = store.findMember(strInput);
+                    if (index == -1) {
+                        // User is not a member
+                        System.out.println("Welcome, "+strInput+"!");
+                        System.out.println("Please enter your credit card number:");
+                        intInput = sc.nextInt();
+                        sc.nextLine();
+                        System.out.println("Please enter the expiration date:");
+                        tempString = sc.nextLine();
+                        System.out.println(store.placeOrder(new CreditCard(intInput, tempString), cart));
+                    } else {
+                        if (store.getMembers().get(index) instanceof PremiumMember) {
+                            // User is a premium member
+                            System.out.println("Welcome, "+store.getMembers().get(index).getName()+"!");
+                            System.out.println(store.placeOrder(((PremiumMember)store.getMembers().get(index)).getCardOnFile(), cart));
+                            store.getMembers().get(index).addMoneySpent(orderTotal);
+                        } else {
+                            // User is a regular member
+                            System.out.println("Welcome, "+store.getMembers().get(index).getName()+"!");
+                            System.out.println("Please enter your credit card number:");
+                            intInput = sc.nextInt();
+                            sc.nextLine();
+                            System.out.println("Please enter the expiration date in the format mm/dd/yyyy:");
+                            strInput = sc.nextLine();
+                            System.out.println(store.placeOrder(new CreditCard(intInput, strInput), cart));
+                            store.getMembers().get(index).addMoneySpent(orderTotal);
+                        }
+                    }
+
+                    
+
+                    cart.clear();
                     // END PURCHASE PROMPT
 
                     // BEGIN OLD PURCHASE PROMPT
@@ -255,7 +322,10 @@ public class TestHarness {
                             strInput = sc.nextLine();
                             System.out.println("Please enter the card number for the new premium member: ");
                             intInput = sc.nextInt();
-                            store.addPremiumMember(new PremiumMember(strInput, intInput));
+                            sc.nextLine();
+                            System.out.println("Please enter the expiration date for that card:");
+                            tempString = sc.nextLine();
+                            store.addMember(new PremiumMember(strInput, new CreditCard(intInput, tempString)));
                             System.out.println("Premium member "+strInput+" added.");
                             System.out.println("Card number for premium member "+strInput+" set to "+intInput+".");
                             break;
@@ -277,7 +347,7 @@ public class TestHarness {
                             sc.nextLine();
                             System.out.println("Enter the name of the book's author:");
                             strInput = sc.nextLine();
-                            store.addBook(new Book(tempString, tempDouble, strInput));
+                            store.addProduct(new Book(tempString, tempDouble, strInput));
                             System.out.println("Book "+tempString+" added to inventory.");
                             break;
 
@@ -289,7 +359,7 @@ public class TestHarness {
                             sc.nextLine();
                             System.out.println("Enter the name the studio that released the DVD:");
                             strInput = sc.nextLine();
-                            store.addDVD(new DVD(tempString, tempDouble, strInput));
+                            store.addProduct(new DVD(tempString, tempDouble, strInput));
                             System.out.println("DVD "+tempString+" added to inventory.");
                             break;
 
@@ -301,7 +371,7 @@ public class TestHarness {
                             sc.nextLine();
                             System.out.println("Enter the name of the artist:");
                             strInput = sc.nextLine();
-                            store.addCD(new CD(tempString, tempDouble, strInput));
+                            store.addProduct(new CD(tempString, tempDouble, strInput));
                             System.out.println("CD "+tempString+" added to inventory.");
                             break;
                     
@@ -312,26 +382,20 @@ public class TestHarness {
 
                 case 4: // Show members and premium members
                     System.out.println("Premium members:");
-                    for (PremiumMember member : store.getPremiumMembers()) {
-                        System.out.println("\tName: "+member.getName()+"\t\tTotal spent: $"+member.getSpent()+"\t\tSubscription paid: "+member.isSubscriptionPaid()+"\t\tCard on file: "+member.getPaymentCardNo());
+                    for (Member member : store.getMembers()) {
+                        if (member instanceof PremiumMember)
+                            System.out.println("\tName: "+member.getName()+"\t\tTotal spent: $"+member.getSpent()+"\t\tSubscription paid: "+((PremiumMember)member).isSubscriptionPaid()+"\t\tCard on file: "+((PremiumMember)member).getCardOnFile().getCardNo());
                     }
                     System.out.println();
                     System.out.println("Members:");
                     for (Member member : store.getMembers()) {
-                        System.out.println("\tName: "+member.getName()+"\t\tTotal spent: $"+member.getSpent());
+                        if (member instanceof Member)
+                            System.out.println("\tName: "+member.getName()+"\t\tTotal spent: $"+member.getSpent());
                     }
                     break;
 
                 case 5: // Show current inventory.
-                    System.out.println("Books:");
-                    store.printBookInventory();
-                    System.out.println();
-                    System.out.println("DVDs:");
-                    store.printDVDInventory();
-                    System.out.println();
-                    System.out.println("CDs:");
-                    store.printCDInventory();
-                    System.out.println();
+                    store.printInventory();
                     break;
             }
         } // END MAIN LOOP

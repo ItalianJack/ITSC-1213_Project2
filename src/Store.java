@@ -45,5 +45,14 @@ public class Store {
         }
         return "Order placed with card "+card.getCardNo()+" Exp: "+card.getExpDate();
     }
+
+    public void printInventory() {
+        for (int i = 0; i < inventory.size(); i++) {
+            System.out.println("----------------");
+            System.out.println(i);
+            inventory.get(i).print();
+            System.out.println();
+        }
+    }
     
 }// end class
