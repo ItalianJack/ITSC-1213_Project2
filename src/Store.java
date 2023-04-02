@@ -30,6 +30,7 @@ public class Store {
     public boolean removeMember(Member m) {return members.remove(m);}
     public boolean removeProduct(Product p) {return inventory.remove(p);}
 
+    // Search the members list for a member with the given name
     public int findMember(String n) {
         for (int i = 0; i < members.size(); i++) {
             if (members.get(i).getName().equals(n))
@@ -46,6 +47,7 @@ public class Store {
         return "Order placed with card "+card.getCardNo()+" Exp: "+card.getExpDate();
     }
 
+    // Prints the current inventory with the index of the items in the inventory list
     public void printInventory() {
         for (int i = 0; i < inventory.size(); i++) {
             System.out.println("----------------");

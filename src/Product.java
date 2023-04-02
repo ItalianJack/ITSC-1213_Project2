@@ -20,11 +20,4 @@ public abstract class Product {
         System.out.println("Price: $"+this.price);
     }
 
-    // @Override
-    // public int compareTo(Product o) {
-    //     if (this instanceof Book && (o instanceof CD || o instanceof DVD)) {
-    //         return 1;
-    //     } else if (this instanceof)
-    //     return 0;
-    // }
 }
