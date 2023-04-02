@@ -24,7 +24,7 @@ public class Store implements BookstoreSpecification {
     public ArrayList<Product> getInventory() {return this.inventory;}
 
     // Add members or products to inventory
-    public void addProduct(Product p) {inventory.add(p);}
+    public void addProduct(Product p) {inventory.add(p);inventory.sort(null);}
     public void addMember(Member m) {members.add(m);}
 
     // Remove members or products from inventory.

@@ -162,12 +162,12 @@ public class TestHarness {
                     System.out.println("Please enter 1 to add a new item, or 2 to add more of an existing item.");
                     intInput = sc.nextInt();
                     sc.nextLine();
-                    switch (intInput) {
+                    switch (intInput) { // begin existing vs new switch
                         case 1: // Adding a new item
                             System.out.println("Please enter 1 to add a book, 2 for a DVD, and 3 for a CD:");
                             intInput = sc.nextInt();
                             sc.nextLine();
-                            switch (intInput) {
+                            switch (intInput) { // begin product type switch
                                 case 1: // Adding a book.
                                     System.out.println("Enter the book's name:");
                                     tempString = sc.nextLine();
@@ -207,6 +207,7 @@ public class TestHarness {
                                 default:
                                     break;
                             }
+                            break;
                         case 2: // Adding more of an existing item
                             System.out.println("Current inventory:");
                             store.printInventory();
