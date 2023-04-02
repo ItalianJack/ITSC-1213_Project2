@@ -16,6 +16,7 @@ public class Store implements BookstoreSpecification {
         addProduct(new Book("The Bible", 15.99, "God"));
         addProduct(new DVD("Die Hard", 19.99, "Universal Studios"));
         addProduct(new CD("Gunfighter Ballads and Trail Songs", 11.99, "Marty Robbins"));
+        inventory.sort(null);
     }
 
     // Getters
